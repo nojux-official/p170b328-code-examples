@@ -1,0 +1,7 @@
+cmake-build-debug/
+bin/
+obj/
+Properties/
+out/
+*.iml
+.idea/
