@@ -12,10 +12,9 @@ namespace ElementariPrograma
 
         public void Execute()
         {
-            Console.Write(_name + ": ");
-            Console.Write("vienas ");
-            Console.Write("du ");
-            Console.WriteLine("trys");
+            Console.WriteLine(_name + ": one");
+            Console.WriteLine(_name + ": two");
+            Console.WriteLine(_name + ": three");
         }
     }
 }

@@ -5,11 +5,13 @@ public class DemoThread extends Thread{
         super(name);
     }
 
+    /**
+     * Writes some simple output to console
+     */
     @Override
     public void run() {
-        System.out.print(this.getName() + ": ");
-        System.out.print("vienas ");
-        System.out.print("du ");
-        System.out.println("trys ");
+        System.out.println(this.getName() + ": one");
+        System.out.println(this.getName() + ": two");
+        System.out.println(this.getName() + ": three");
     }
 }

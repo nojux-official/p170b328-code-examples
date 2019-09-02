@@ -1,17 +1,29 @@
 package edu.ktu.ryselis;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Main {
 
     public static void main(String[] args) {
-        Thread thread1 = new Thread(new DemoRunnable("Pirma"));
-        Thread thread2 = new Thread(new DemoRunnable("Antra"));
-        thread1.start();
-        thread2.start();
-        try {
-            thread1.join();
-            thread2.join();
-        } catch (InterruptedException e) {
-            System.out.println("Thread was interrupted");
-        }
+        // create names for threads
+        List<String> names = List.of("First", "Second");
+        // create a thread object for each name. .map() calls DemoRunnable constructor with each name
+        // on the list, second .map() calls Thread constructor with each runnable
+        List<Thread> runnables = names.stream()
+                .map(DemoRunnable::new)
+                .map(Thread::new)
+                .collect(Collectors.toList());
+        // launch all threads
+        runnables.forEach(Thread::start);
+        // wait for all threads to finish
+        runnables.forEach(thread -> {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                System.out.println("Thread was interrupted");
+            }
+        });
+        System.out.println("Program finished execution");
     }
 }

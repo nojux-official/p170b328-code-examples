@@ -9,9 +9,8 @@ public class DemoRunnable implements Runnable {
 
     @Override
     public void run() {
-        System.out.print(this.name + ": ");
-        System.out.print("vienas ");
-        System.out.print("du ");
-        System.out.println("trys ");
+        System.out.println(this.name + ": one");
+        System.out.println(this.name + ": two");
+        System.out.println(this.name + ": three");
     }
 }
