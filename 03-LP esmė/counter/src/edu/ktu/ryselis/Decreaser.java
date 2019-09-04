@@ -7,6 +7,9 @@ public class Decreaser implements Runnable {
         this.counter = counter;
     }
 
+    /**
+     * Calls counter.decrease 50 times
+     */
     @Override
     public void run() {
         for (int i = 0; i < 50; i++) {
