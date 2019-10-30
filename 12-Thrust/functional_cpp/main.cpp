@@ -24,10 +24,7 @@ int main() {
 }
 
 vector<int> get_vector() {
-    vector<int> result;
-    result.reserve(20);
-    for (auto i = 1; i < 21; i++) {
-        result.push_back(i);
-    }
+    vector<int> result(20);
+    iota(result.begin(), result.end(), 1);
     return result;
 }
