@@ -24,13 +24,13 @@
                 const worker = new Worker("worker.js");
                 worker.onmessage = event => {
                     partialSums.push(event.data);
-                    if (partialSums.length === 8) {
+                    if (partialSums.length === threadCount) {
                         resolve(partialSums);
                     }
                 };
                 worker.postMessage(numbers.slice(chunkStart, chunkEnd));
             }
-        })
+        });
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
