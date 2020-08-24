@@ -11,9 +11,9 @@ func main()  {
 	// create a wait group that will be used to wait for threads to finish
 	var waitGroup = sync.WaitGroup{}
 	// we are going to launch 2 threads (call waitGroup.Done() twice), so pass 2 to Add
-	waitGroup.Add(2)
-	for i := 0; i < 2; i++ {
-		go execute(names[i], &waitGroup)  // call execute, but launch it in a new thread
+	waitGroup.Add(len(names))
+	for _, name := range names {
+		go execute(name, &waitGroup)  // call execute, but launch it in a new thread
 	}
 	// wait for both threads to finish (until waitGroup.Done is called 2 times)
 	waitGroup.Wait()

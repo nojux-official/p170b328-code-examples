@@ -1,7 +1,7 @@
 package edu.ktu.ryselis;
 
 public class DemoRunnable implements Runnable {
-    private String name;
+    private final String name;
 
     DemoRunnable(String name){
         this.name = name;
@@ -9,8 +9,8 @@ public class DemoRunnable implements Runnable {
 
     @Override
     public void run() {
-        System.out.println(this.name + ": one");
-        System.out.println(this.name + ": two");
-        System.out.println(this.name + ": three");
+        System.out.println(name + ": one");
+        System.out.println(name + ": two");
+        System.out.println(name + ": three");
     }
 }

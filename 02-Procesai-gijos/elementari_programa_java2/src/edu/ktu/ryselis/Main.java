@@ -7,10 +7,10 @@ public class Main {
 
     public static void main(String[] args) {
         // create names for threads
-        List<String> names = List.of("First", "Second");
+        var names = List.of("First", "Second");
         // create a thread object for each name. .map() calls DemoRunnable constructor with each name
         // on the list, second .map() calls Thread constructor with each runnable
-        List<Thread> runnables = names.stream()
+        var runnables = names.stream()
                 .map(DemoRunnable::new)
                 .map(Thread::new)
                 .collect(Collectors.toList());

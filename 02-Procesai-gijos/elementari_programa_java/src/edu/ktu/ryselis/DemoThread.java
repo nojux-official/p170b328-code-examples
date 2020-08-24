@@ -10,8 +10,8 @@ public class DemoThread extends Thread{
      */
     @Override
     public void run() {
-        System.out.println(this.getName() + ": one");
-        System.out.println(this.getName() + ": two");
-        System.out.println(this.getName() + ": three");
+        System.out.println(getName() + ": one");
+        System.out.println(getName() + ": two");
+        System.out.println(getName() + ": three");
     }
 }
