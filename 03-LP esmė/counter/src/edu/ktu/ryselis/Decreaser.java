@@ -12,7 +12,7 @@ public class Decreaser implements Runnable {
      */
     @Override
     public void run() {
-        for (int i = 0; i < 50; i++) {
+        for (var i = 0; i < 50; i++) {
             try {
                 counter.decrease();
             } catch (InterruptedException e) {

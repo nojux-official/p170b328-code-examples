@@ -1,6 +1,5 @@
 package edu.ktu.ryselis;
 
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -8,15 +7,15 @@ import java.util.stream.Stream;
 public class Main {
 
     public static void main(String[] args) {
-        SimpleBoundedCounter counter = new SimpleBoundedCounter();  // create counter
+        var counter = new SimpleBoundedCounter();  // create counter
         // create 10 runnables that will increase value of the counter
-        Stream<Runnable> increasers = IntStream.range(0, 10).mapToObj(i -> new Increaser(counter));
+        var increasers = IntStream.range(0, 10).mapToObj(i -> new Increaser(counter));
         // create 9 runnables that will decrease value of the counter
-        Stream<Runnable> decreasers = IntStream.range(0, 9).mapToObj(i -> new Decreaser(counter));
+        var decreasers = IntStream.range(0, 9).mapToObj(i -> new Decreaser(counter));
         // merge all runnables into a single stream
-        Stream<Runnable> runnables = Stream.concat(increasers, decreasers);
+        var runnables = Stream.concat(increasers, decreasers);
         // create a thread for each runnable
-        List<Thread> threads = runnables.map(Thread::new).collect(Collectors.toList());
+        var threads = runnables.map(Thread::new).collect(Collectors.toList());
         // start all threads
         threads.forEach(Thread::start);
         // wait for all threads to finish
