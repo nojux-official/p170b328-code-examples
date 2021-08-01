@@ -32,3 +32,7 @@ venv/
 *.class
 target/*
 **/packages/*
+debug/
+target/
+**/*.rs.bk
+*.pdb
