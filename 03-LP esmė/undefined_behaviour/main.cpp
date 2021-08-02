@@ -9,8 +9,8 @@ using namespace std;
 void process(int* c);
 
 int main() {
-    int a = 0;  // create a variable with some initial value assigned
-    int* c = &a;  // get a pointer to that variable
+    auto a = 0;  // create a variable with some initial value assigned
+    auto c = &a;  // get a pointer to that variable
     // we are going to launch 15 threads - make a vector with 15 slots available
     vector<thread> threads;
     threads.reserve(15);
@@ -29,9 +29,8 @@ int main() {
 /// Does this 1000 times.
 /// \param c pointer to shared memory across threads
 void process(int* c){
-    int k = 0;
     for (int i = 0; i < 1000; i++){
-        k = *c;  // take value that is currently in memory location c
+        auto k = *c;  // take value that is currently in memory location c
         k++; // increment k; *c stays the same, only k is incremented
         // another thread may have read the same value of k, resulting in two threads writing the
         // same value (race condition).
