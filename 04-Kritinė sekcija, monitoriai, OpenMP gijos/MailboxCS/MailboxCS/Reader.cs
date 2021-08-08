@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace mailbox_cs
+namespace MailboxCS
 {
     public class Reader
     {

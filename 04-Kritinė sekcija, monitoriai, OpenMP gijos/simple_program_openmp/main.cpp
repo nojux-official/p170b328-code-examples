@@ -5,23 +5,25 @@
 
 using namespace std;
 
-void execute(const string &vardas);
+void execute(const string &name);
 
-int main(){
-    vector<string> threadNames = {"Pirma", "Antra"};
-    omp_set_num_threads(threadNames.size());
-    int threadNumber = 0;
-#pragma omp parallel private(threadNumber)
+int main() {
+    vector<string> thread_names = {"First", "Second"};
+    omp_set_num_threads((int) thread_names.size());
+#pragma omp parallel shared(thread_names) default(none)
     {
-        threadNumber = omp_get_thread_num();
-        string name = threadNames[threadNumber];
-        execute(name);
+        auto threadNumber = omp_get_thread_num();
+        string name = thread_names[threadNumber];
+#pragma omp critical
+        {
+            execute(name);
+        }
     }
-    cout << "Programa baigė darbą" << endl;
+    cout << "Program finished execution" << endl;
 }
 
-void execute(const string &vardas){
-    cout << vardas << ": vienas" << endl;
-    cout << vardas << ": du" << endl;
-    cout << vardas << ": trys" << endl;
+void execute(const string &name) {
+    cout << name << ": one" << endl;
+    cout << name << ": two" << endl;
+    cout << name << ": three" << endl;
 }

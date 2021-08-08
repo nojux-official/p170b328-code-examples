@@ -1,17 +1,38 @@
 #include <iostream>
 #include <omp.h>
+#include <random>
 
 using namespace std;
 
+const size_t ARRAY_SIZE = 2147483;
+
+void fill_array_with_random_numbers(int *arr, size_t size);
+
 int main() {
-    auto c = 0;
-    auto thread_count = 50;
-    auto k = 5;
-#pragma omp parallel reduction(+:c) num_threads(thread_count)
+    auto numbers = new int[ARRAY_SIZE];
+    fill_array_with_random_numbers(numbers, ARRAY_SIZE);
+    auto sum = 0;
+    // calculate sum of numbers by splitting array into as many chunks as we have threads, calculate each sum separately
+    // and then get the full sum using reduction directive
+#pragma omp parallel reduction(+:sum) default(none) shared(numbers)
     {
-        for (int i = 0; i < k; i++){
-            c += i;
-        }
+        auto total_threads = omp_get_num_threads();
+        auto chunk_size = ARRAY_SIZE / total_threads;
+        auto thread_number = omp_get_thread_num();
+        auto start_index = chunk_size * thread_number;
+        auto end_index = thread_number == total_threads - 1 ? ARRAY_SIZE : ((thread_number + 1) * chunk_size);
+        sum = accumulate(numbers + start_index, numbers + end_index, 0,
+                         [](int acc, int curr) { return acc + curr; });
+
     }
-    cout << c << endl;
+    cout << sum << endl;
+}
+
+void fill_array_with_random_numbers(int *arr, size_t size) {
+    random_device rd;
+    mt19937 rng(rd());
+    uniform_int_distribution<int> uni(0, 1000);
+    for (auto i = 0; i < size; i++) {
+        arr[i] = uni(rng);
+    }
 }

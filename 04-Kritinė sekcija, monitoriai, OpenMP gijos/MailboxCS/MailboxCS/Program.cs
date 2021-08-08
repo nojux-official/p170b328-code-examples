@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading;
 
-namespace mailbox_cs
+namespace MailboxCS
 {
     internal static class Program
     {
-        public static void Main(string[] args)
+        private static void Main()
         {
             const int readerCount = 5;
             const int itemsProcessed = 6;
@@ -30,7 +30,7 @@ namespace mailbox_cs
                 thread.Join();
             }
 
-            var lines = readers.Select(r => r.Letters).Select(letters => string.Join(", ", letters));
+            var lines = readers.Select(r => string.Join(", ", r.Letters));
             foreach (var line in lines)
             {
                 Console.WriteLine(line);
