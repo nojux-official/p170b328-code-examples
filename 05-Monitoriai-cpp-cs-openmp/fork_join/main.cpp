@@ -22,7 +22,7 @@ int main() {
     // buffer for the image data. Each pixel is 3 bytes (red, green, blue)
     auto* png_buffer = new uint8_t[ROWS * COLS * 3];
     auto start = high_resolution_clock::now();  // start time measurement
-#pragma omp parallel for
+#pragma omp parallel for default(none) shared(png_buffer, COLS)
     // iterate over all columns and rows
     for (auto col = 0; col < COLS; col++) {
         for (auto row = 0; row < ROWS; row++) {
