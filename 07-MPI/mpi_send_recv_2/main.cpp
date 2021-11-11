@@ -23,7 +23,7 @@ int main() {
             char buffer[5];  // store received message here
             Status status;  // store message status here
             COMM_WORLD.Probe(ANY_SOURCE, 1, status);  // check incoming message status
-            COMM_WORLD.Recv(buffer, status.Get_count(CHAR), CHAR, ANY_SOURCE, 1);  // receive the message
+            COMM_WORLD.Recv(buffer, status.Get_count(CHAR), CHAR, status.Get_source(), 1);  // receive the message
             string message(&buffer[0], &buffer[status.Get_count(CHAR)]);
             cout << "Received value " << message << endl;
         }
