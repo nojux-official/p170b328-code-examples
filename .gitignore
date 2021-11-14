@@ -5,7 +5,6 @@ Properties/
 out/
 *.iml
 .idea/
-lib/
 dist
 dist-*
 cabal-dev
@@ -36,3 +35,4 @@ debug/
 target/
 **/*.rs.bk
 *.pdb
+*.out
