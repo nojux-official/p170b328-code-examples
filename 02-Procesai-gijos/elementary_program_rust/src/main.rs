@@ -5,9 +5,9 @@ use std::thread::JoinHandle;
 param name: thread's name, printed in each output line
 */
 fn execute(name: &str) {
-    println!("{}", name.to_owned() + ": one");
-    println!("{}", name.to_owned() + ": two");
-    println!("{}", name.to_owned() + ": three");
+    println!("{}: one", name);
+    println!("{}: two", name);
+    println!("{}: three", name);
 }
 
 
