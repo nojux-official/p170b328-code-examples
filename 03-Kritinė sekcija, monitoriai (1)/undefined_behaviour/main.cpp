@@ -1,20 +1,25 @@
 #include <iostream>
 #include <thread>
 #include <vector>
-#include <algorithm>
 #include <functional>
 
 using namespace std;
 
 void process(int* c);
 
+/**
+ * This program demonstrates a bad programming example - running it will produce different output each time! 
+ */
+
+const size_t THREAD_COUNT = 15;
+
 int main() {
     auto a = 0;  // create a variable with some initial value assigned
     auto c = &a;  // get a pointer to that variable
     // we are going to launch 15 threads - make a vector with 15 slots available
     vector<thread> threads;
-    threads.reserve(15);
-    for (int i = 0; i < 15; i++){
+    threads.reserve(THREAD_COUNT);
+    for (auto i = 0; i < THREAD_COUNT; i++){
         // launch 15 processes passing the same pointer c
         threads.emplace_back(process, c);
     }
