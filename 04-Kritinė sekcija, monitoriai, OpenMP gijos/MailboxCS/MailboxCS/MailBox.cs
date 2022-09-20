@@ -10,12 +10,13 @@ namespace MailboxCS
         private bool _canWrite;
         private bool[] _canRead;
         private readonly object _locker;
+        private const int EmptyMessage = int.MinValue;
 
         public MailBox(int readers)
         {
             _readers = readers;
             _canRead = Enumerable.Repeat(false, readers).ToArray();
-            _letter = 0;
+            _letter = EmptyMessage;
             _canWrite = true;
             _locker = new object();
         }

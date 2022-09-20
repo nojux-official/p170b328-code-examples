@@ -11,7 +11,7 @@ void fill_array_with_random_numbers(int *arr, size_t size);
 int main() {
     auto numbers = new int[ARRAY_SIZE];
     fill_array_with_random_numbers(numbers, ARRAY_SIZE);
-    auto sum = 0;
+    int sum;
     // calculate sum of numbers by splitting array into as many chunks as we have threads, calculate each sum separately
     // and then get the full sum using reduction directive
 #pragma omp parallel reduction(+:sum) default(none) shared(numbers)

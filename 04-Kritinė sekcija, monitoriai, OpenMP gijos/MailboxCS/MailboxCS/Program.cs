@@ -11,7 +11,9 @@ namespace MailboxCS
             const int readerCount = 5;
             const int itemsProcessed = 6;
             var mailbox = new MailBox(readerCount);
-            var readers = Enumerable.Range(0, readerCount).Select(i => new Reader(itemsProcessed, mailbox, i)).ToList();
+            var readers = Enumerable.Range(0, readerCount)
+                .Select(i => new Reader(itemsProcessed, mailbox, i))
+                .ToList();
             var threads = readers.Select(reader => new Thread(reader.Read)).ToList();
             threads.Add(new Thread(() =>
             {

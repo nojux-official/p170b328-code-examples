@@ -22,7 +22,7 @@ int main() {
     // default(none) means that for all variables used inside parallel for block we have to define if they are private
     // or shared
     // shared means that all our vectors are shared between threads (vectors are not copied for each thread)
-#pragma omp parallel for default(none) shared(vector1, vector2, vector3)
+#pragma omp parallel for default(none) shared(vector1, vector2, vector3, VECTOR_SIZE)
     for (auto i = 0; i < VECTOR_SIZE; i++) {
         // compute sum for each item
         vector3[i] = vector1[i] + vector2[i];

@@ -1,7 +1,5 @@
 #include <iostream>
 #include <omp.h>
-#include <mutex>
-#include <condition_variable>
 
 using namespace std;
 
@@ -9,12 +7,13 @@ int main() {
     const auto MIN = 0;
     const auto MAX = 50;
     auto count = 0;
-    auto increaser_count = 10;
-    auto decreaser_count = 9;
-#pragma omp parallel num_threads(increaser_count + decreaser_count)
+    const auto increasing_thread_count = 10;
+    const auto decreasing_thread_count = 9;
+    const auto total_threads = increasing_thread_count + decreasing_thread_count;
+#pragma omp parallel num_threads(total_threads) default(none) shared(increasing_thread_count, count)
     {
         int thread_id = omp_get_thread_num();
-        if (thread_id < increaser_count) {
+        if (thread_id < increasing_thread_count) {
             for (auto i = 0; i < 50;) {
 #pragma omp critical (count_critical)
                 {
@@ -28,7 +27,7 @@ int main() {
             for (auto i = 0; i < 50;) {
 #pragma omp critical (count_critical)
                 {
-                    if (count > 0) {
+                    if (count > MIN) {
                         count--;
                         i++;
                     }

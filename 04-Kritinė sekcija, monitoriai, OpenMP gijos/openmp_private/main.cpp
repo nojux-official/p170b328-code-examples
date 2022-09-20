@@ -5,9 +5,9 @@ using namespace std;
 
 int main() {
     auto c = 99;
-    auto * lock = new omp_lock_t;
+    auto *lock = new omp_lock_t;
     omp_init_lock(lock);
-#pragma omp parallel num_threads(3) private(c)
+#pragma omp parallel num_threads(3) default(none) private(c) shared(lock, cout)
     {
         c = omp_get_thread_num();
         omp_set_lock(lock);

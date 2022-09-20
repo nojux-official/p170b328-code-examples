@@ -13,7 +13,7 @@ int main() {
 #pragma omp parallel shared(thread_names) default(none)
     {
         auto threadNumber = omp_get_thread_num();
-        string name = thread_names[threadNumber];
+        auto name = thread_names[threadNumber];
 #pragma omp critical
         {
             execute(name);

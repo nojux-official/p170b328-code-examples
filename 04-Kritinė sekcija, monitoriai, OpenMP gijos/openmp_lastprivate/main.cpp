@@ -5,9 +5,9 @@ using namespace std;
 
 int main() {
     auto c = 99;
-    auto * lock = new omp_lock_t;
+    auto *lock = new omp_lock_t;
     omp_init_lock(lock);
-#pragma omp parallel for lastprivate(c)
+#pragma omp parallel for lastprivate(c) default(none) shared(lock, cout)
     for (int i = 0; i < 3; i++){
         c = omp_get_thread_num();
         omp_set_lock(lock);
