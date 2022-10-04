@@ -18,8 +18,7 @@ func main() {
 	coordinatorToMain := make(chan bool)
 	crawlerToCoordinator := make(chan bool)
 	coordinatorToPrinter := make(chan bool)
-
-	urls := [4]string{"http://www.google.com", "https://duckduckgo.com/", "http://www.bing.com", "http://yahoo.com"}
+	urls := [4]string{"https://www.google.com", "https://duckduckgo.com/", "https://www.bing.com", "https://yahoo.com"}
 
 	// information flows like this: main thread [url] -> crawler [content] -> title extractor [title] -> printer.
 	// crawler also has to analyse downloaded HTML to extract the links
@@ -67,7 +66,7 @@ func main() {
 		// coordinator process
 		// waits for a end-of-work signal from all crawlers...
 		for i := 0; i < crawlerCount; i++ {
-			<- crawlerToCoordinator
+			<-crawlerToCoordinator
 		}
 		// sends an end-of-work signal to all analysers...
 		for i := 0; i < analyserCount; i++ {
@@ -77,7 +76,6 @@ func main() {
 		coordinatorToPrinter <- true
 		coordinatorToMain <- true
 	}()
-
 
 	go func() {
 		// printer process
@@ -104,7 +102,7 @@ func main() {
 		urlChannel <- ""
 	}
 	// wait for signal from coordinator
-	<- coordinatorToMain
+	<-coordinatorToMain
 }
 
 const regexLink = `href=['"]?([^'" >]+)['"]`
@@ -140,4 +138,3 @@ func analyzeWebContent(text string) []string {
 	}
 	return result
 }
-
