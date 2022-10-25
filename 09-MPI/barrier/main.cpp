@@ -5,9 +5,9 @@
 using namespace std;
 using namespace MPI;
 
-const int MESSAGES_SENT_PER_PROCESS = 50;
+const int MESSAGES_SENT_PER_PROCESS = 65;
 const int ROOT_PROCESS = 0;
-const int MAX_ITERATIONS = 5;
+const int MAX_ITERATIONS = 6;
 
 int main() {
     Init();  // initialize MPI

@@ -13,10 +13,11 @@ private:
 public:
     Student(string name, int year, double average_grade);
     string to_json();
-    static Student from_json(string json_string);
+    static Student from_json(const string& json_string);
     string get_name();
-    int get_study_year();
-    double get_average_grade();
+    [[nodiscard]] int get_study_year() const;
+    [[nodiscard]] double get_average_grade() const;
+    string to_string();
 };
 
 

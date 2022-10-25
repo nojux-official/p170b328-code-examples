@@ -31,7 +31,7 @@ int main() {
         // processes 1-5 are senders; get message for the sender and send it
         string message = get_message(rank);
         const char *buffer = message.c_str();
-        COMM_WORLD.Send(buffer, static_cast<int>(message.size()), CHAR, 0, 1);
+        COMM_WORLD.Send(buffer, (int) message.size(), CHAR, 0, 1);
     }
     Finalize();
 }

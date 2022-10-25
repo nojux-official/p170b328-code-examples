@@ -13,7 +13,7 @@
         return numbers;
     }
 
-    function getSumAsync(numbers) {
+    async function getSumAsync(numbers) {
         return new Promise(resolve => {
             const threadCount = 8;
             const chunkSize = numbers.length / threadCount;
@@ -34,7 +34,7 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
-        const numbers = generateRandomNumbers(10000);
+        const numbers = generateRandomNumbers(11000);
         const partialSums = await getSumAsync(numbers);
         writeResult(partialSums.reduce((acc, num) => acc + num));
     });

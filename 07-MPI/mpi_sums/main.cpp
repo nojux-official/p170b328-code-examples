@@ -1,6 +1,5 @@
 #include <iostream>
 #include <mpi.h>
-#include <list>
 #include <random>
 
 using namespace std;
@@ -8,6 +7,8 @@ using namespace MPI;
 
 void calculate_full_sum();
 void calculate_partial_sum();
+
+const int MAIN_PROCESS = 0;
 
 int main() {
     Init();
@@ -22,8 +23,8 @@ int main() {
 }
 
 void calculate_full_sum() {
-    int worker_count = COMM_WORLD.Get_size() - 1;
-    const auto DATA_SIZE = 10000;
+    auto worker_count = COMM_WORLD.Get_size() - 1;
+    const auto DATA_SIZE = 13000;
     int numbers[DATA_SIZE];
     random_device rd;
     mt19937 rng(rd());
@@ -36,8 +37,7 @@ void calculate_full_sum() {
     for (auto i = 0; i < worker_count; i++) {
         int end_index = (i == worker_count - 1 ? DATA_SIZE - 1: (i+1) * chunk_size - 1);
         int start_index = i * chunk_size;
-        int current_chunk_size = end_index - start_index + 1;
-        COMM_WORLD.Send(&current_chunk_size, 1, INT, i + 1, 1);
+        int current_chunk_size = end_index - start_index;
         COMM_WORLD.Send(numbers + start_index, current_chunk_size, INT, i + 1, 2);
     }
     for (auto i = 0; i < worker_count; i++) {
@@ -48,10 +48,11 @@ void calculate_full_sum() {
 }
 
 void calculate_partial_sum() {
-    int items_to_process;
-    COMM_WORLD.Recv(&items_to_process, 1, INT, 0, 1);
-    int items[items_to_process];
-    COMM_WORLD.Recv(items, items_to_process, INT, 0, 2);
-    auto total_sum = accumulate(&items[0], &items[items_to_process], 0, [](int x, int y) { return x + y;});
+    Status status;
+    COMM_WORLD.Probe(MAIN_PROCESS, ANY_TAG, status);
+    const auto item_count = status.Get_count(INT);
+    int items[item_count];
+    COMM_WORLD.Recv(items, item_count, INT, 0, ANY_TAG);
+    auto total_sum = accumulate(items, items + item_count, 0, [](int x, int y) { return x + y;});
     COMM_WORLD.Send(&total_sum, 1, INT, 0, 1);
 }
