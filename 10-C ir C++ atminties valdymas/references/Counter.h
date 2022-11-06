@@ -12,7 +12,7 @@ private:
 public:
     void increase();
     void decrease();
-    int get_count();
+    [[nodiscard]] int get_count() const;
 };
 
 

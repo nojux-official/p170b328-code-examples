@@ -15,7 +15,7 @@ private:
     string name;
     string species;
 public:
-    Animal(string name, string species): name(move(name)), species(move(species)) {};
+    Animal(string name, string species): name(std::move(name)), species(std::move(species)) {};
     string get_name();
     string get_species();
 };

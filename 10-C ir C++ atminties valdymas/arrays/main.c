@@ -8,9 +8,7 @@ void copy_array(const int* from, int* to, size_t array_size);
 
 // a program that calculates sum of two arrays and demonstrates how to use arrays and arrays as pointers
 int main() {
-    // generate a random array size
-    srand((unsigned int) time(NULL));
-    unsigned int n = (unsigned int) (rand() % 1000);
+    size_t n = 1300;
     // create an array of selected size. Array is create on stack - if it were larger that main's stack size, we would
     // get a stack overflow. As it is created using array syntax, it is deleted automatically at the end of this function
     int array1[n];

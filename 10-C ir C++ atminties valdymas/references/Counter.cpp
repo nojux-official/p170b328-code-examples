@@ -12,6 +12,6 @@ void Counter::decrease() {
     count--;
 }
 
-int Counter::get_count() {
+int Counter::get_count() const {
     return count;
 }
