@@ -1,8 +1,5 @@
 #include "cuda_runtime.h"
-#include <cuda.h>
-#include <cstdio>
 #include <iostream>
-#include "device_launch_parameters.h"
 #include <random>
 #include <algorithm>
 
@@ -11,7 +8,7 @@ using namespace std;
 const int ARRAY_SIZE = 100;
 
 void generate_random_array(int* array, size_t size);
-__global__ void add(int* a, int* b, int* c);
+__global__ void add(const int* a, const int* b, int* c);
 
 int main() {
     int first[ARRAY_SIZE], second[ARRAY_SIZE], sum[ARRAY_SIZE];
@@ -41,8 +38,8 @@ void generate_random_array(int *array, size_t size) {
     generate(array, &array[size], [&] { return uniform_dist(engine); });
 }
 
-__global__ void add(int* a, int* b, int* c) {
-    int thread_id = threadIdx.x;
+__global__ void add(const int* a, const int* b, int* c) {
+    auto thread_id = threadIdx.x;
     if (thread_id < ARRAY_SIZE) {
         c[thread_id] = a[thread_id] + b[thread_id];
     }

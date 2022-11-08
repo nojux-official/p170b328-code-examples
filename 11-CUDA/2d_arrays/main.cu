@@ -1,9 +1,6 @@
 #include "cuda_runtime.h"
-#include <cuda.h>
-#include <cstdio>
 #include <iostream>
 #include <iomanip>
-#include "device_launch_parameters.h"
 #include <random>
 #include <algorithm>
 
@@ -15,7 +12,7 @@ const size_t FULL_ARRAY_SIZE = ARRAY_SIZE * INNER_ARRAY_SIZE;
 
 void generate_random_array(int *array, size_t size);
 void print_matrix(int* matrix);
-__global__ void get_doubled_matrix(int* original, int* result);
+__global__ void get_doubled_matrix(const int* original, int* result);
 
 // a program that demonstrates how to use blocks and threads to multiply all elements in a matrix by 2.
 int main() {
@@ -53,8 +50,8 @@ int main() {
     print_matrix(doubled_matrix_host);
 
     // destroy allocated memory on CPU
-    delete flat_matrix;
-    delete doubled_matrix_host;
+    delete[] flat_matrix;
+    delete[] doubled_matrix_host;
 
     return 0;
 }
@@ -71,7 +68,7 @@ void generate_random_array(int *array, size_t size) {
 void print_matrix(int* matrix) {
     for (auto i = 0; i < ARRAY_SIZE; i++) {
         for (auto j = 0; j < INNER_ARRAY_SIZE; j++) {
-            int index = INNER_ARRAY_SIZE * i + j;
+            auto index = INNER_ARRAY_SIZE * i + j;
             cout << setw(4) << matrix[index];
         }
         cout << endl;
@@ -80,7 +77,7 @@ void print_matrix(int* matrix) {
 
 // Function that is run on GPU as many times as there elements in our matrix. One thread computes one element in the 
 // result matrix.
-__global__ void get_doubled_matrix(int* original, int* result) {
+__global__ void get_doubled_matrix(const int* original, int* result) {
     auto index = blockIdx.x * blockDim.x + threadIdx.x;
     result[index] = original[index] * 2;
 }

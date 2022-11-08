@@ -1,11 +1,8 @@
-cmake_minimum_required(VERSION 3.17)
-project(atomic_operations CUDA)
+cmake_minimum_required(VERSION 3.12)
+project(atomic_operations)
 
-set(CMAKE_CUDA_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
+enable_language(CUDA)
 
 add_executable(atomic_operations main.cu)
-
-set_target_properties(
-        atomic_operations
-        PROPERTIES
-        CUDA_SEPARABLE_COMPILATION ON)
+set_target_properties(atomic_operations PROPERTIES CUDA_ARCHITECTURES all-major)
