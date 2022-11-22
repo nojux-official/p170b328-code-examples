@@ -55,7 +55,8 @@ def main():
     cpu_count = multiprocessing.cpu_count()  # we will spawn as many processes as the core count
     lock = multiprocessing.Lock()
     # create process objects and tell them to call process_elements function with args queue and lock
-    processing_processes = [multiprocessing.Process(target=process_elements, args=(queue, lock))
+    processing_processes = [multiprocessing.Process(target=process_elements,
+                                                    args=(queue, lock))
                             for _ in range(cpu_count)]
     # start the processes
     for process in processing_processes:

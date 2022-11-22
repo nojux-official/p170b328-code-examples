@@ -9,3 +9,4 @@ link_directories(${CUDA_LIBRARY_DIRS})
 enable_language(CUDA)
 
 add_executable(thrust_vectors main.cu)
+set_target_properties(thrust_vectors PROPERTIES CUDA_ARCHITECTURES all-major)
