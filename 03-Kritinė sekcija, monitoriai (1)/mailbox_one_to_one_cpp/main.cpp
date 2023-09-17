@@ -23,16 +23,15 @@ int main() {
         mailBox.put(TERMINATE_MESSAGE);
     });
     threads.emplace_back([&]{
-        // receiver thread - receive messages until the termination message arrives and output them all at the end
-        vector<int> received_messages;
+        // receiver thread - receive messages until the termination message arrives and output them all
         int received_mail;  // variable to hold a message
         // receive a message and run the body of the loop if the message is not equal to termination message
         while ((received_mail = mailBox.get()) != TERMINATE_MESSAGE) {
-            // save the message to a vector for later
-            received_messages.push_back(received_mail);
+            // print the received message to console (there is one printing thread, so it's fine - console is not a
+            // shared resource)
+            cout << received_mail << endl;
         }
         // all messages are received, print them all
-        for_each(received_messages.begin(), received_messages.end(), [=](int i) {cout << i << endl;});
     });
     // wait for both threads to finish, otherwise they will be killed when main finishes
     for_each(threads.begin(), threads.end(), mem_fn(&thread::join));
