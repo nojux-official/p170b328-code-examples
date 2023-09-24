@@ -4,24 +4,29 @@ namespace MailboxCS
 {
     public class Reader
     {
-        private readonly int _itemsToRead;
         public List<int> Letters { get; }
         private readonly MailBox _mailbox;
         private readonly int _id;
+        private readonly int _terminateMessage;
 
-        public Reader(int itemsToRead, MailBox mailbox, int id)
+        public Reader(int terminateMessage, MailBox mailbox, int id)
         {
-            _itemsToRead = itemsToRead;
             _mailbox = mailbox;
             _id = id;
             Letters = new List<int>();
+            _terminateMessage = terminateMessage;
         }
 
         public void Read()
         {
-            for (var i = 0; i < _itemsToRead; i++)
+            while (true)
             {
-                Letters.Add(_mailbox.Get(_id));
+                var message = _mailbox.Get(_id);
+                if (message == _terminateMessage)
+                {
+                    break;
+                }
+                Letters.Add(message);
             }
         }
     }

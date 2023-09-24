@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 
@@ -5,18 +6,15 @@ namespace MailboxCS
 {
     public class MailBox
     {
-        private int _letter;
-        private readonly int _readers;
+        private readonly object _locker;
         private bool _canWrite;
         private bool[] _canRead;
-        private readonly object _locker;
         private const int EmptyMessage = int.MinValue;
+        private int _letter = EmptyMessage;
 
         public MailBox(int readers)
         {
-            _readers = readers;
-            _canRead = Enumerable.Repeat(false, readers).ToArray();
-            _letter = EmptyMessage;
+            _canRead = new bool[readers];
             _canWrite = true;
             _locker = new object();
         }
@@ -32,7 +30,7 @@ namespace MailboxCS
 
                 _letter = newLetter;
                 _canWrite = false;
-                _canRead = Enumerable.Repeat(true, _readers).ToArray();
+                Array.Fill(_canRead, true);
                 Monitor.PulseAll(_locker);
             }
         }
@@ -49,7 +47,7 @@ namespace MailboxCS
 
                 newLetter = _letter;
                 _canRead[k] = false;
-                _canWrite = _canRead.All(c => !c);
+                _canWrite = !_canRead.Any(r => r);
                 Monitor.PulseAll(_locker);
             }
             return newLetter;
