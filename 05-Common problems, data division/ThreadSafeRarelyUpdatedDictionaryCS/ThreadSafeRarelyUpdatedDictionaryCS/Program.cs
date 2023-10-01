@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -7,10 +8,10 @@ namespace ThreadSafeRarelyUpdatedDictionaryCS
 {
     internal static class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             var dictionary = new RarelyUpdatedDictionary<string, int>();
-            var readItems = new List<int>();
+            var readItems = new ConcurrentQueue<int>();
             var threads = Enumerable.Range(0, 10).Select(n => new Thread(() =>
             {
                 for (var i = 0; i < 100; i++)
@@ -21,12 +22,13 @@ namespace ThreadSafeRarelyUpdatedDictionaryCS
                         try
                         {
                             item = dictionary[i.ToString()];
-                        } catch(KeyNotFoundException) {}                        
-                    }
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            continue;
+                        }
 
-                    lock (readItems)
-                    {
-                        readItems.Add(item);
+                        readItems.Enqueue(item);
                     }
                 }
             })).ToList();
