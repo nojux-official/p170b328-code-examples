@@ -11,7 +11,7 @@ using namespace std;
 int main() {
     ThreadSafeStack<int> safe_stack;  // thread-safe stack structure
     vector<int> items;
-    items.resize(1000);
+    items.resize(10000);
     // generate items beginning from 0 and going through all vector, incrementing each element by 1. The result is
     // items filled with number from 0 to 1000
     iota(items.begin(), items.end(), 0);

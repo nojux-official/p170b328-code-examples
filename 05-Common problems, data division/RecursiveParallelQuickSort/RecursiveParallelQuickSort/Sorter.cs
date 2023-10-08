@@ -11,7 +11,7 @@ namespace RecursiveParallelQuickSort
         {
             var availableThreads = Environment.ProcessorCount;
             var maxDepth = Math.Ceiling(Math.Log2(availableThreads));
-            return RunSort(input, (int)maxDepth);
+            return RunSort(input, (int) maxDepth - 1);
         }
 
         private static List<T> RunSort(List<T> input, int depth)
@@ -31,8 +31,8 @@ namespace RecursiveParallelQuickSort
                 .ToDictionary(g => g.Key, g => g.ToList());
             // get the split lists (if all items are lower than pivot, false key will not be in dictionary and vice
             // versa
-            var lowerItems = itemLists.ContainsKey(true) ? itemLists[true] : new List<T>();
-            var higherItems = itemLists.ContainsKey(false) ? itemLists[false] : new List<T>();
+            var lowerItems = itemLists.TryGetValue(true, out var list) ? list : new List<T>();
+            var higherItems = itemLists.TryGetValue(false, out var itemList) ? itemList : new List<T>();
             List<T> sortedLowerItems = null;
             Thread thread = null;
             // sort lower half in the same thread in depth is negative or new thread if depth has not yet reached
@@ -47,7 +47,7 @@ namespace RecursiveParallelQuickSort
             }
             else
             {
-                sortedLowerItems = RunSort(lowerItems, 0);
+                sortedLowerItems = RunSort(lowerItems, -1);
             }
             
             // higher items is always computed on the same thread
