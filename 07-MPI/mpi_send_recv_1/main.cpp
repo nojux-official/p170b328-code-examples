@@ -7,10 +7,6 @@ using namespace std;
 // sends a message to process 0.
 int main() {
     MPI::Init();  // initialize MPI; without this we would get an error when calling other MPI functions
-    // get processor name (it actually is a computer name, not CPU name)
-    char name[MPI::MAX_PROCESSOR_NAME];
-    int name_length = 0;
-    MPI::Get_processor_name(name, name_length);
     // check rank (process number)
     auto rank = MPI::COMM_WORLD.Get_rank();
     // check how many processes we have
@@ -18,6 +14,10 @@ int main() {
     if (rank == 0) {
         // process number 0: send message to process 1 and receive response
         cout << "Process count " << totalProcesses << endl;
+        // get processor name (it actually is a computer name, not CPU name)
+        char name[MPI::MAX_PROCESSOR_NAME];
+        int name_length = 0;
+        MPI::Get_processor_name(name, name_length);
         cout << "Processor name " << name << endl;
         int sent_message = 0, received_message = 0;
         // in order to send a message, we must pass its address and type: MPI.Send accepts a void pointer as first
