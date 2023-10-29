@@ -1,32 +1,38 @@
 #include <iostream>
 #include <mpi.h>
-#include <algorithm>
+#include <numeric>
 
 using namespace std;
 using namespace MPI;
 
 const int MAIN_PROCESS = 0;
 
-const auto MAX_MESSAGE_SIZE = 5;
-const auto MAX_PROCESS_COUNT = 4;
+const auto NUM_PER_PROCESS = 6;
 
+/// main process generates an array of integers and splits them evenly between the processes
 int main() {
     Init();
-    char chunk[MAX_MESSAGE_SIZE];
-    char words[MAX_MESSAGE_SIZE * MAX_PROCESS_COUNT];
-    generate(words, words + MAX_MESSAGE_SIZE * MAX_PROCESS_COUNT, [] { return '-';});
+    auto total_processes = COMM_WORLD.Get_size();
+    auto data_size = total_processes * NUM_PER_PROCESS;
+    // full_data only has to be initialized in the main processes, all others will have a nullptr value for it
+    int* full_data = nullptr;
     auto rank = COMM_WORLD.Get_rank();
     if (rank == MAIN_PROCESS) {
-        string words_to_scatter[] = {"zero", "one", "two", "three"};
-        for (int i = 0; i < MAX_PROCESS_COUNT; i++) {
-            string word = words_to_scatter[i];
-            word.copy(words + MAX_MESSAGE_SIZE * i, word.size(), 0);
-        }
+        // initialize the array and fill it with numbers from 0 to data_size
+        full_data = new int[data_size];
+        iota(full_data, full_data + data_size, 0);
     }
-    COMM_WORLD.Scatter(words, MAX_MESSAGE_SIZE, CHAR, chunk, MAX_MESSAGE_SIZE, CHAR, MAIN_PROCESS);
+    // initialize an array for one chunk of data
+    int chunk[NUM_PER_PROCESS];
+    // distribute data from MAIN_PROCESS full_data array to every process chunk array
+    COMM_WORLD.Scatter(full_data, NUM_PER_PROCESS, INT, chunk, NUM_PER_PROCESS, INT, MAIN_PROCESS);
     Finalize();
-    string word(chunk, chunk + MAX_MESSAGE_SIZE);
-    cout << "Process " << rank << " received " << word << endl;
-    cout << "Process " << rank << " had words " << string(words, words + MAX_MESSAGE_SIZE * MAX_PROCESS_COUNT) << endl;
+
+    // print the received chunk
+    cout << "Process " << rank << " received ";
+    for_each(chunk, chunk + NUM_PER_PROCESS, [](auto num) {cout << num << " ";});
+    cout << endl;
+    // free up initialized data array
+    delete[] full_data;
     return 0;
 }

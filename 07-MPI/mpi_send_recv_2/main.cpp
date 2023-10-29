@@ -20,9 +20,9 @@ int main() {
         // excluding this process
         auto size = COMM_WORLD.Get_size();
         for (int i = 1; i < size; i++) {
-            char buffer[5];  // store received message here
             Status status;  // store message status here
             COMM_WORLD.Probe(ANY_SOURCE, 1, status);  // check incoming message status
+            char buffer[status.Get_count(CHAR)];  // store received message here
             COMM_WORLD.Recv(buffer, status.Get_count(CHAR), CHAR, status.Get_source(), 1);  // receive the message
             string message(&buffer[0], &buffer[status.Get_count(CHAR)]);
             cout << "Received value " << message << endl;
@@ -30,7 +30,7 @@ int main() {
     } else {
         // processes 1-5 are senders; get message for the sender and send it
         string message = get_message(rank);
-        const char *buffer = message.c_str();
+        auto *buffer = message.c_str();
         COMM_WORLD.Send(buffer, (int) message.size(), CHAR, 0, 1);
     }
     Finalize();
