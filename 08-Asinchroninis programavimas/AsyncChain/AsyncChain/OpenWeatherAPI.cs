@@ -10,13 +10,9 @@ namespace AsyncChain
     /// </summary>
     public class OpenWeatherApi
     {
-        private readonly string _apiKey;
+        // sets API key from api_key.txt file. One should register for the key at OpenWeather web page
+        private readonly string _apiKey = File.ReadAllText("api_key.txt");
 
-        public OpenWeatherApi()
-        {
-            // sets API key from api_key.txt file. One should register for the key at OpenWeather web page
-            _apiKey = File.ReadAllText("api_key.txt");
-        }
 
         /// <summary>
         /// Makes a request to download current temperature for a city
@@ -27,8 +23,10 @@ namespace AsyncChain
         {
             // url should look like this: http://api.openweathermap.org/data/2.5/weather?id=<cityId>&appid=<apiKey>
             const string apiRoot = "http://api.openweathermap.org/";
-            using var client = new HttpClient();
-            return await client.GetStreamAsync($"{apiRoot}data/2.5/weather?id={cityId}&appid={_apiKey}");
+            using (var client = new HttpClient())
+            {
+                return await client.GetStreamAsync($"{apiRoot}data/2.5/weather?id={cityId}&appid={_apiKey}");
+            }
         }
 
         /// <summary>

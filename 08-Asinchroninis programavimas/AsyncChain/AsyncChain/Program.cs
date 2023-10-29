@@ -22,7 +22,7 @@ namespace AsyncChain
                 {593116, "Vilnius"},
                 {596128, "Panevėžys"},
                 {597231, "Marijampolė"},
-                {598316, "Kaunas"},
+                {598316, "Kaunas"}
             };
             var tasks = cities
                 .Select(async cityData =>
