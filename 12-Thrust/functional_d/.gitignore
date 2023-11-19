@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/functional_d
+functional_d.so
+functional_d.dylib
+functional_d.dll
+functional_d.a
+functional_d.lib
+functional_d-test-*
+*.exe
+*.o
+*.obj
+*.lst

@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Karolis Ryselis"
+	],
+	"copyright": "Copyright © 2023, Karolis Ryselis",
+	"description": "Functional style code example",
+	"license": "proprietary",
+	"name": "functional_d"
+}
