@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace ParallelQuicksort
@@ -7,13 +8,17 @@ namespace ParallelQuicksort
     {
         private static void Main()
         {
+            var stopwatch = new Stopwatch();
             var rand = new Random();
-            var numbers = Enumerable.Range(0, 40000).Select(_ => rand.Next(1000)).ToList();
+            var numbers = Enumerable.Range(0, 44000).Select(_ => rand.Next(1000)).ToList();
+            stopwatch.Start();
             var sorted = Sorter.GetSorted(numbers);
-            double median = sorted.Count % 2 == 1
+            stopwatch.Stop();
+            var median = sorted.Count % 2 == 1
                 ? sorted[sorted.Count / 2]
-                : (sorted[sorted.Count / 2 - 1] + sorted[sorted.Count / 2]) / 2;
+                : (sorted[sorted.Count / 2 - 1] + sorted[sorted.Count / 2]) / 2.0;
             Console.WriteLine($"Median is {median}");
+            Console.WriteLine($"Elapsed time: {stopwatch.ElapsedMilliseconds} ms");
         }
     }
 }
