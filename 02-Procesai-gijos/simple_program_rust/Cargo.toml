@@ -3,6 +3,7 @@ name = "elementary_program_rust"
 version = "0.1.0"
 authors = ["ryselis <karolis.ryselis@ktu.edu>"]
 edition = "2018"
+rust-version = "1.38.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
