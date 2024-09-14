@@ -20,7 +20,7 @@ int main() {
         auto chunk_size = ARRAY_SIZE / total_threads;
         auto thread_number = omp_get_thread_num();
         auto start_index = chunk_size * thread_number;
-        auto end_index = thread_number == total_threads - 1 ? ARRAY_SIZE : ((thread_number + 1) * chunk_size);
+        auto end_index = thread_number == total_threads - 1 ? ARRAY_SIZE - 1 : ((thread_number + 1) * chunk_size - 1);
         sum = accumulate(numbers + start_index, numbers + end_index, 0,
                          [](int acc, int curr) { return acc + curr; });
 
