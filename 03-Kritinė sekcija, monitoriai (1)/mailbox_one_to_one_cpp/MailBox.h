@@ -11,12 +11,11 @@
 using namespace std;
 
 class MailBox {
-private:
     int mail;
     bool exists;
     mutex lock;
     condition_variable cv;
-    static const int EMPTY_VALUE = INT32_MIN;
+    static constexpr int EMPTY_VALUE = INT32_MIN;
 public:
     MailBox();
     void put(int new_mail);

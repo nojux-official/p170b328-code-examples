@@ -6,7 +6,7 @@
 
 using namespace std;
 
-const auto TERMINATE_MESSAGE = INT32_MAX;
+constexpr auto TERMINATE_MESSAGE = INT32_MAX;
 // the program spawns two threads - a "sender" and a "receiver". The sender puts messages into the mailbox, receiver
 // takes them from the mailbox. Mailbox can only store one message at a time. The threads are synchronized so that there
 // is one write followed by one read -- each message must be sent and received exactly once

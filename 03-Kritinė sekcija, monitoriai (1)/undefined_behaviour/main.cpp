@@ -11,7 +11,7 @@ void process(int* c);
  * This program demonstrates a bad programming example - running it will produce different output each time! 
  */
 
-const size_t THREAD_COUNT = 15;
+constexpr size_t THREAD_COUNT = 15;
 
 int main() {
     auto a = 0;  // create a variable with some initial value assigned
