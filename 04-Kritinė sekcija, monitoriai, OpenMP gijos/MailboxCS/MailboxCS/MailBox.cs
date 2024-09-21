@@ -8,7 +8,7 @@ namespace MailboxCS
     {
         private readonly object _locker;
         private bool _canWrite;
-        private bool[] _canRead;
+        private readonly bool[] _canRead;
         private const int EmptyMessage = int.MinValue;
         private int _letter = EmptyMessage;
 
@@ -19,18 +19,32 @@ namespace MailboxCS
             _locker = new object();
         }
 
+        /// <summary>
+        /// Adds a message to the mailbox overwriting the existing message. If the previous message has not been
+        /// retrieved by a Get call by each reader, the caller is blocked.
+        /// </summary>
+        /// <param name="newLetter">The value to add to the mailbox</param>
         public void Put(int newLetter)
         {
+            // this method modifies _letter, _canWrite and _canRead attributes, which are also used by reader threads,
+            // therefore a lock is required for this method
             lock (_locker)
             {
                 while (!_canWrite)
                 {
+                    // _canWrite flag indicates whether the Put method can safely add the message or not. If not, the
+                    // thread must be blocked so that it waits for the flag to change.
                     Monitor.Wait(_locker);
                 }
 
+                // write the message
                 _letter = newLetter;
+                // a new message has been added, the next message cannot be added immediately - all reader threads must
+                // read it first
                 _canWrite = false;
+                // all reader threads may now ready the message, update all _canRead values to true
                 Array.Fill(_canRead, true);
+                // if any reader threads were block by calling Wait in Get method, notify them here
                 Monitor.PulseAll(_locker);
             }
         }
