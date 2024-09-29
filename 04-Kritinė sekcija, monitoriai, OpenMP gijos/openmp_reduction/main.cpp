@@ -34,6 +34,6 @@ void fill_array_with_random_numbers(int *arr, const size_t size) {
     mt19937 rng(rd());
     uniform_int_distribution<int> uni(0, 1000);
     for (auto i = 0; i < size; i++) {
-        arr[i] = 1;
+        arr[i] = uni(rng);
     }
 }

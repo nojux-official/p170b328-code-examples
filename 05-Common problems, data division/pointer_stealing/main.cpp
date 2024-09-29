@@ -1,4 +1,3 @@
-#include <iostream>
 #include <thread>
 #include <vector>
 #include <numeric>
@@ -17,7 +16,7 @@ int main() {
     iota(items.begin(), items.end(), 0);
     thread t([&]() {
         // thread that pushes all items on stack
-        for_each(items.begin(), items.end(), [&](auto item) {
+        ranges::for_each(items, [&](auto item) {
             safe_stack.push(item);
         });
     });
@@ -28,7 +27,7 @@ int main() {
         stolen_data = &storage;  // grab a pointer to internal storage of the stack and assign it to our variable
     });
     // do some evil stuff
-    for_each(items.begin(), items.end(), [&](auto item) {
+    ranges::for_each(items, [&](auto item) {
         stolen_data->push(item);  // segmentation fault is likely to happen here
     });
     t.join();
