@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 )
 
 const crawlerCount = 4
 const analyserCount = 4
+const analyzerStopMessage = "<die>"
 
 func main() {
 	urlChannel := make(chan string)
@@ -52,7 +53,7 @@ func main() {
 			for {
 				content := <-contentChannel
 				title := extractWebpageTitle(content)
-				if title == "<die>" {
+				if title == analyzerStopMessage {
 					break
 				}
 				if len(title) > 0 {
@@ -64,13 +65,13 @@ func main() {
 
 	go func() {
 		// coordinator process
-		// waits for a end-of-work signal from all crawlers...
+		// waits for an end-of-work signal from all crawlers...
 		for i := 0; i < crawlerCount; i++ {
 			<-crawlerToCoordinator
 		}
 		// sends an end-of-work signal to all analysers...
 		for i := 0; i < analyserCount; i++ {
-			contentChannel <- "<die>"
+			contentChannel <- analyzerStopMessage
 		}
 		// sends an end-of-work signal to printer and main process
 		coordinatorToPrinter <- true
@@ -108,12 +109,13 @@ func main() {
 const regexLink = `href=['"]?([^'" >]+)['"]`
 const regexTitle = `<title.*?>(.*)</title>`
 
+// gets the content of a webpage under the specified url as a string
 func getWebpageContent(url string) string {
 	resp, err := http.Get(url)
 	if err != nil {
 		return ""
 	}
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return ""
 	}
