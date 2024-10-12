@@ -8,18 +8,19 @@ using namespace std;
 int main() {
     MPI::Init();  // initialize MPI; without this we would get an error when calling other MPI functions
     // check rank (process number)
-    auto rank = MPI::COMM_WORLD.Get_rank();
+    const auto rank = MPI::COMM_WORLD.Get_rank();
     // check how many processes we have
-    auto totalProcesses = MPI::COMM_WORLD.Get_size();
+    const auto total_processes = MPI::COMM_WORLD.Get_size();
     if (rank == 0) {
         // process number 0: send message to process 1 and receive response
-        cout << "Process count " << totalProcesses << endl;
+        cout << "Process count " << total_processes << endl;
         // get processor name (it actually is a computer name, not CPU name)
         char name[MPI::MAX_PROCESSOR_NAME];
         int name_length = 0;
         MPI::Get_processor_name(name, name_length);
         cout << "Processor name " << name << endl;
-        int sent_message = 0, received_message = 0;
+        constexpr int sent_message = 0;
+        int received_message = 0;
         // in order to send a message, we must pass its address and type: MPI.Send accepts a void pointer as first
         // parameter which means that all type information is lost - we just pass a pointer to memory without specifying
         // which type we are passing. As different types take up different amount of memory, we must pass all this
@@ -33,8 +34,9 @@ int main() {
         MPI::COMM_WORLD.Recv(&received_message, 1, MPI::INT, 1, 1);
         cout << "Received message " << received_message << endl;
     } else {
+        constexpr int sent_message = 1;
         // process number 1: get message from process 0 and send response
-        int sent_message = 1, received_message = 1;
+        int received_message = 1;
         MPI::COMM_WORLD.Recv(&received_message, 1, MPI::INT, 0, 1);
         cout << "Received message " << received_message << endl;
         MPI::COMM_WORLD.Send(&sent_message, 1, MPI::INT, 0, 1);
