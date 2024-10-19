@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <mpi.h>
 #include <numeric>
@@ -5,18 +6,18 @@
 using namespace std;
 using namespace MPI;
 
-const int MAIN_PROCESS = 0;
+constexpr int MAIN_PROCESS = 0;
 
-const auto NUM_PER_PROCESS = 6;
+constexpr auto NUM_PER_PROCESS = 6;
 
 /// main process generates an array of integers and splits them evenly between the processes
 int main() {
     Init();
-    auto total_processes = COMM_WORLD.Get_size();
-    auto data_size = total_processes * NUM_PER_PROCESS;
+    const auto total_processes = COMM_WORLD.Get_size();
+    const auto data_size = total_processes * NUM_PER_PROCESS;
     // full_data only has to be initialized in the main processes, all others will have a nullptr value for it
     int* full_data = nullptr;
-    auto rank = COMM_WORLD.Get_rank();
+    const auto rank = COMM_WORLD.Get_rank();
     if (rank == MAIN_PROCESS) {
         // initialize the array and fill it with numbers from 0 to data_size
         full_data = new int[data_size];
@@ -34,5 +35,4 @@ int main() {
     cout << endl;
     // free up initialized data array
     delete[] full_data;
-    return 0;
 }

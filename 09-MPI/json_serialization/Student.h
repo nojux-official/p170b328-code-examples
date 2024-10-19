@@ -6,7 +6,6 @@
 using namespace std;
 
 class Student {
-private:
     string name;
     int study_year;
     double average_grade;
