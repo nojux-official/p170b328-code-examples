@@ -49,6 +49,7 @@ func main() {
 	fmt.Println("Float sum:", floatSum)
 }
 
+// writes all numbers from 0 to 15 into the channel, followed by termination message
 func generateIntegers(outChannel chan<- int) {
 	for i := 0; i < 15; i++ {
 		outChannel <- i
@@ -56,6 +57,7 @@ func generateIntegers(outChannel chan<- int) {
 	outChannel <- intEndMessage
 }
 
+// writes numbers from 0.5 to 19.5 with a step of 1 into the channel, followed by termination message
 func generateFloats(outChannel chan<- float64) {
 	for i := 0.5; i < 20; i += 1 {
 		outChannel <- i

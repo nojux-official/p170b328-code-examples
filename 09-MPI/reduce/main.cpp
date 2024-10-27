@@ -5,8 +5,8 @@
 using namespace MPI;
 using namespace std;
 
-const int ITEM_COUNT = 19;
-const int ROOT_PROCESS = 0;
+constexpr int ITEM_COUNT = 20;
+constexpr int ROOT_PROCESS = 0;
 
 // A program that demonstrates how MPI_Reduce works. Each process has an array of 15 elements fill in some way. At 
 // first, we find the largest element at each index across all processes using MPI, then we find global maximum using
@@ -14,7 +14,7 @@ const int ROOT_PROCESS = 0;
 int main() {
     Init();  // initialize MPI
     int items[ITEM_COUNT];  // data of each process
-    auto rank = COMM_WORLD.Get_rank();  // check current process ID
+    const auto rank = COMM_WORLD.Get_rank();  // check current process ID
     // fill the array in some way
     for (auto i = 0; i < ITEM_COUNT; i++) {
         items[i] = i * i * (rank + 1);
@@ -29,7 +29,7 @@ int main() {
         });
         // also find the maximum of all maxima we collected. This does not use MPI, but is here for the sake of
         // completeness :)
-        auto global_maximum = max_element(results, results + ITEM_COUNT);
+        const auto global_maximum = max_element(results, results + ITEM_COUNT);
         cout << "Global maximum: " << *global_maximum << endl;  // global_maximum is a pointer and has to be dereferenced
     }
     Finalize();  // shut down MPI so it does not crash at the end

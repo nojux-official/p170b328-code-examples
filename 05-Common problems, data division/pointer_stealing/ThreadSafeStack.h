@@ -12,17 +12,16 @@ using namespace std;
 
 template <class T>
 class ThreadSafeStack {
-private:
     stack<T> storage;
     mutex m;
 public:
     void push(T item) {
-        unique_lock<mutex> lock(m);
+        unique_lock lock(m);
         storage.push(item);
     }
     template <typename Function>
     void call_user_function(Function func) {
-        unique_lock<mutex> lock(m);
+        unique_lock lock(m);
         func(storage);
     };
 };

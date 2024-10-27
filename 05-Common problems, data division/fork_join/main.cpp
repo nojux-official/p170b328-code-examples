@@ -1,5 +1,4 @@
 #include <complex>
-#include <vector>
 #include <fstream>
 #include <chrono>
 #include <iostream>
@@ -14,10 +13,10 @@ double compute_row(int col);
 
 double compute_column(int row);
 
-const double WIDTH = 2.5;
-const double HEIGHT = 2.5;
-const size_t ROWS = 2000;
-const size_t COLS = 2000;
+constexpr double WIDTH = 2.5;
+constexpr double HEIGHT = 2.5;
+constexpr size_t ROWS = 2000;
+constexpr size_t COLS = 2000;
 
 // generates an image of Mandelbrot set
 int main() {
@@ -33,7 +32,7 @@ int main() {
             auto y = compute_column(col);
             complex<double> c(x, y);
             auto colour = is_mandelbrot(c, 100) ? 0 : 255;
-            auto offset = (col * COLS * 3) + (3 * row);
+            auto offset = col * COLS * 3 + 3 * row;
             png_buffer[offset] = colour;
             png_buffer[offset + 1] = colour;
             png_buffer[offset + 2] = colour;
@@ -50,13 +49,13 @@ int main() {
     cout << "Image generated in " << duration.count() << " ms" << endl;
 }
 
-double compute_row(int col) {
+double compute_row(const int col) {
     const complex<double> CENTER(-0.75, 0.0);
-    return CENTER.real() - WIDTH / 2.0 + (double) col * WIDTH / (double) COLS;
+    return CENTER.real() - WIDTH / 2.0 + static_cast<double>(col) * WIDTH / static_cast<double>(COLS);
 }
 
-bool is_mandelbrot(complex<double> number, int iterations) {
-    complex<double> z(0.0, 0.0);
+bool is_mandelbrot(const complex<double> number, const int iterations) {
+    complex z(0.0, 0.0);
     auto accumulator = 0;
     while (accumulator < iterations && abs(z) < 2.0) {
         z = z * z + number;
@@ -65,7 +64,7 @@ bool is_mandelbrot(complex<double> number, int iterations) {
     return accumulator == iterations;
 }
 
-double compute_column(int row) {
-    const complex<double> CENTER(-0.75, 0.0);
-    return CENTER.imag() - HEIGHT / 2.0 + (double) row * HEIGHT / (double) ROWS;
+double compute_column(const int row) {
+    const complex CENTER(-0.75, 0.0);
+    return CENTER.imag() - HEIGHT / 2.0 + static_cast<double>(row) * HEIGHT / static_cast<double>(ROWS);
 }

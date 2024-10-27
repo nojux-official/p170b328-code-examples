@@ -5,17 +5,17 @@
 using namespace std;
 using namespace MPI;
 
-const int MESSAGES_SENT_PER_PROCESS = 65;
-const int ROOT_PROCESS = 0;
-const int MAX_ITERATIONS = 6;
+constexpr int MESSAGES_SENT_PER_PROCESS = 65;
+constexpr int ROOT_PROCESS = 0;
+constexpr int MAX_ITERATIONS = 6;
 
 int main() {
     Init();  // initialize MPI
-    auto rank = COMM_WORLD.Get_rank();  // get process rank
-    auto process_count = COMM_WORLD.Get_size();  // get process count
+    const auto rank = COMM_WORLD.Get_rank();  // get process rank
+    const auto process_count = COMM_WORLD.Get_size();  // get process count
     auto count = 0;  // we will increment this value in process 0
     // calculate the amount of received messages per iteration
-    auto messages_received = (process_count - 1) * MESSAGES_SENT_PER_PROCESS;
+    const auto messages_received = (process_count - 1) * MESSAGES_SENT_PER_PROCESS;
     // initialize random number generator
     random_device dev;
     std::mt19937 rng(dev());

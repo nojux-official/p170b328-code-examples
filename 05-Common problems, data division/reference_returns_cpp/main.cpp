@@ -12,7 +12,7 @@ void insert(SortedThreadSafeList<int> &list);
 /// A program that demonstrates the issue with returning data from monitor to a non-synchronized context
 int main() {
     SortedThreadSafeList<int> thread_safe_list;  // monitor object, has thread_safe_list inside
-    auto storage = thread_safe_list.get_storage();  // get internal list from monitor
+    const auto storage = thread_safe_list.get_storage();  // get internal list from monitor
     thread thread(insert, ref(thread_safe_list));  // thread object
     // modify the list without synchronization - adds items to the beginning of the vector, but without locks
     for (auto i = 10000; i < 15000; i++) {
@@ -21,7 +21,7 @@ int main() {
     }
     thread.join();
     // print items to the console
-    for_each(storage->begin(), storage->end(), [](auto item) { cout << item << endl; });
+    ranges::for_each(*storage, [](auto item) { cout << item << endl; });
 }
 
 
@@ -35,7 +35,7 @@ void insert(SortedThreadSafeList<int> &list) {
     // shuffle the items
     random_device rd;
     default_random_engine engine(rd());
-    shuffle(items.begin(), items.end(), engine);
+    ranges::shuffle(items, engine);
     // add each item to the list
-    for_each(items.begin(), items.end(), [&](auto item) { list.add(item); });
+    ranges::for_each(items, [&](auto item) { list.add(item); });
 }

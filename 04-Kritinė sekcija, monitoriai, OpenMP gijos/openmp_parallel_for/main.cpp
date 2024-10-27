@@ -1,12 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <numeric>
-#include <algorithm>
 #include <chrono>
 
 using namespace std;
 
-const int VECTOR_SIZE = 100000000;
+constexpr int VECTOR_SIZE = 100000000;
 
 int main() {
     // create 2 vectors
@@ -17,7 +16,7 @@ int main() {
     iota(vector2.begin(), vector2.end(), 0);
     // create vector for the sum of vector1 and vector2
     vector<int> vector3(VECTOR_SIZE);
-    auto t1 = chrono::high_resolution_clock::now();
+    const auto t1 = chrono::high_resolution_clock::now();
     // parallel for makes the for loop run in parallel
     // default(none) means that for all variables used inside parallel for block we have to define if they are private
     // or shared
@@ -27,6 +26,6 @@ int main() {
         // compute sum for each item
         vector3[i] = vector1[i] + vector2[i];
     }
-    auto t2 = chrono::high_resolution_clock::now();
+    const auto t2 = chrono::high_resolution_clock::now();
     cout << chrono::duration_cast<chrono::microseconds>(t2 - t1).count() << endl;
 }

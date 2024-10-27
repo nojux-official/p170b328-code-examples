@@ -41,6 +41,7 @@ namespace ThreadSafeQueueCS
                     threadSafeQueue.AddItem(i);
                 }
             }));
+            // start the threads
             foreach (var thread in threads)
             {
                 thread.Start();
