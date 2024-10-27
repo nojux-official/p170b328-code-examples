@@ -23,10 +23,8 @@ namespace AsyncChain
         {
             // url should look like this: http://api.openweathermap.org/data/2.5/weather?id=<cityId>&appid=<apiKey>
             const string apiRoot = "http://api.openweathermap.org/";
-            using (var client = new HttpClient())
-            {
-                return await client.GetStreamAsync($"{apiRoot}data/2.5/weather?id={cityId}&appid={_apiKey}");
-            }
+            using var client = new HttpClient();
+            return await client.GetStreamAsync($"{apiRoot}data/2.5/weather?id={cityId}&appid={_apiKey}");
         }
 
         /// <summary>

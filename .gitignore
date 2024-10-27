@@ -36,3 +36,4 @@ target/
 **/*.rs.bk
 *.pdb
 *.out
+node_modules/
