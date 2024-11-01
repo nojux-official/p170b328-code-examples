@@ -10,7 +10,7 @@ namespace ParallelQuicksort
         {
             var stopwatch = new Stopwatch();
             var rand = new Random();
-            var numbers = Enumerable.Range(0, 44000).Select(_ => rand.Next(1000)).ToList();
+            var numbers = Enumerable.Range(0, 45000).Select(_ => rand.Next(1000)).ToList();
             stopwatch.Start();
             var sorted = Sorter.GetSorted(numbers);
             stopwatch.Stop();
