@@ -14,7 +14,7 @@ int main() {
     // this will print an address because we pass a pointer (something like 0x7ffe3417262c)
     printf("Address of number is %p\n", number_ptr);
     // this will print 42, because we are dereferencing a pointer (getting value in that memory location)
-    printf("Deferenced number_ptr is %d\n", *number_ptr);
+    printf("Dereferenced number_ptr is %d\n", *number_ptr);
     // number is passed by making a copy of number - any modifications inside the function are made on a copy
     printf("Doubled number is %d\n", multiply_by_two(number));
     // a copy is also made here - number_ptr is deferenced, a copy of that value is made and the function works on a
@@ -33,7 +33,7 @@ int main() {
 /// we work with a copy inside this function
 /// \param number number to be multiplied
 /// \return a new number
-int multiply_by_two(int number){
+int multiply_by_two(const int number){
     return number * 2;
 }
 

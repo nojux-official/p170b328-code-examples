@@ -9,25 +9,24 @@ Animal* get_chinchilla(const string& name);
 Animal& get_chicken(const string& name);
 
 int main() {
-    auto chinchilla = get_chinchilla("Django");
+    const auto chinchilla = get_chinchilla("Django");
     auto chicken = get_chicken("Rosetta");
-    auto cow = new Animal("Belle", "cow");
+    const auto cow = new Animal("Belle", "cow");
     auto sheep = Animal("Dolly", "sheep");
-    vector<Animal*> animals = {chinchilla, &chicken, cow, &sheep};
-    for_each(animals.begin(), animals.end(), [](Animal* animal) {
+    vector animals = {chinchilla, &chicken, cow, &sheep};
+    for_each(animals.begin(), animals.end(), [](auto* animal) {
         cout << animal->get_species() << " named " << animal->get_name() << endl;
     });
-    delete(chinchilla);
-    delete(cow);
+    delete chinchilla;
+    delete cow;
     return 0;
 }
 
 Animal* get_chinchilla(const string& name) {
-    auto animal = new Animal(name, "chinchilla");
-    return animal;
+    return new Animal(name, "chinchilla");
 }
 
 Animal& get_chicken(const string &name) {
-    auto animal = new Animal(name, "chicken");
+    const auto animal = new Animal(name, "chicken");
     return *animal;
 }
