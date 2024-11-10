@@ -10,9 +10,9 @@ __global__ void get_sum(const int *data, const size_t* count, int* sum);
 /// The example randomly generates a huge array of ints and computes its sum on the GPU.
 
 int main() {
-    const size_t ARRAY_SIZE = 10000000;
+    constexpr size_t ARRAY_SIZE = 10000000;
     // create an array that holds a large number of integers and fill it with data
-    int *numbers = new int[ARRAY_SIZE];
+    auto numbers = new int[ARRAY_SIZE];
     generate_data(numbers, ARRAY_SIZE);
     int initial_sum = 0; // this value is the initial value for sum: we start from zero and then add numbers to it
 
@@ -54,7 +54,7 @@ int main() {
 /// given an array and its size, fills it with random numbers from 0 to 1000
 /// \param data - an array to fill
 /// \param count - size of the array
-void generate_data(int *data, size_t count) {
+void generate_data(int *data, const size_t count) {
     random_device rand;
     mt19937 rng(rand());
     uniform_int_distribution<int> uni(0, 1000);
@@ -71,7 +71,7 @@ __global__ void get_sum(const int *data, const size_t* count, int* sum) {
     // one thread processes one slice of data. Slice size is equal to total count divided by number of threads
     const auto slice_size = *count / blockDim.x;
     // compute start index
-    unsigned long start_index = slice_size * threadIdx.x;
+    const unsigned long start_index = slice_size * threadIdx.x;
     // compute end index. Last thread takes all remaining elements in case they are not split evenly between threads
     unsigned long end_index;
     if (threadIdx.x == blockDim.x - 1) {

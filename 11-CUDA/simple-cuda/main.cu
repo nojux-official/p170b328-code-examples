@@ -6,7 +6,7 @@ using namespace std;
 __global__ void run_on_gpu();
 __device__ void execute(const char* name);
 
-// a program that prints different string in parallel from GPU
+// a program that prints different strings in parallel from GPU
 int main() {
     // start function run_on_gpu on one block on two threads concurrently
     run_on_gpu<<<1, 2>>>();

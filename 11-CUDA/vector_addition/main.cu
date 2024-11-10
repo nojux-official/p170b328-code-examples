@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int ARRAY_SIZE = 100;
+constexpr int ARRAY_SIZE = 100;
 
 void generate_random_array(int* array, size_t size);
 __global__ void add(const int* a, const int* b, int* c);
@@ -15,10 +15,10 @@ int main() {
     generate_random_array(first, ARRAY_SIZE);
     generate_random_array(second, ARRAY_SIZE);
     int *device_first, *device_second, *device_sum;
-    int size = ARRAY_SIZE * sizeof(int);
-    cudaMalloc((void**)&device_first, size);
-    cudaMalloc((void**)&device_second, size);
-    cudaMalloc((void**)&device_sum, size);
+    constexpr int size = ARRAY_SIZE * sizeof(int);
+    cudaMalloc(&device_first, size);
+    cudaMalloc(&device_second, size);
+    cudaMalloc(&device_sum, size);
     cudaMemcpy(device_first, first, size, cudaMemcpyHostToDevice);
     cudaMemcpy(device_second, second, size, cudaMemcpyHostToDevice);
     add<<<1, ARRAY_SIZE>>>(device_first, device_second, device_sum);
@@ -27,7 +27,7 @@ int main() {
     cudaFree(device_first);
     cudaFree(device_second);
     cudaFree(device_sum);
-    for_each(sum, &sum[ARRAY_SIZE], [](int &n) { cout << n << endl;});
+    for_each(sum, &sum[ARRAY_SIZE], [](const int &n) { cout << n << endl;});
     return 0;
 }
 
@@ -39,8 +39,7 @@ void generate_random_array(int *array, size_t size) {
 }
 
 __global__ void add(const int* a, const int* b, int* c) {
-    auto thread_id = threadIdx.x;
-    if (thread_id < ARRAY_SIZE) {
+    if (const auto thread_id = threadIdx.x; thread_id < ARRAY_SIZE) {
         c[thread_id] = a[thread_id] + b[thread_id];
     }
 }
