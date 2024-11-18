@@ -1,11 +1,11 @@
 #include <iostream>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
+#include <thrust/copy.h>
 
 using namespace std;
-using namespace thrust;
 
-host_vector<int> get_vector();
+thrust::host_vector<int> get_vector();
 
 struct is_even {
     __device__ bool operator ()(int item) {
@@ -26,19 +26,19 @@ struct sum_func {
 };
 
 int main() {
-    auto host_data_vector = get_vector();
-    device_vector<int> data_vector = host_data_vector;
-    device_vector<int> filtered_vector(data_vector.size());
-    copy_if(data_vector.begin(), data_vector.end(), filtered_vector.begin(), is_even());
-    device_vector<int> squared_vector(filtered_vector.size());
-    transform(filtered_vector.begin(), filtered_vector.end(), squared_vector.begin(), square_func());
+    const auto host_data_vector = get_vector();
+    thrust::device_vector<int> data_vector = host_data_vector;
+    thrust::device_vector<int> filtered_vector(data_vector.size());
+    thrust::copy_if(data_vector.begin(), data_vector.end(), filtered_vector.begin(), is_even());
+    thrust::device_vector<int> squared_vector(filtered_vector.size());
+    thrust::transform(filtered_vector.begin(), filtered_vector.end(), squared_vector.begin(), square_func());
     int sum = reduce(squared_vector.begin(), squared_vector.end(), 0, sum_func());
     cout << sum << endl;
     return 0;
 }
 
-host_vector<int> get_vector() {
-    host_vector<int> result(20);
+thrust::host_vector<int> get_vector() {
+    thrust::host_vector<int> result(20);
     for (auto i = 1; i < 21; i++) {
         result.push_back(i);
     }

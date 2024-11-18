@@ -6,7 +6,7 @@ namespace functional_cs
 {
     internal static class Program
     {
-        private static IEnumerable<int> GetVector() => Enumerable.Range(0, 20);
+        private static IEnumerable<int> GetVector() => Enumerable.Range(0, 21);
 
         private static void Main()
         {

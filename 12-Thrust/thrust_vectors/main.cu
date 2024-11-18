@@ -5,15 +5,14 @@
 #include <random>
 
 using namespace std;
-using namespace thrust;
 
-const int VECTOR_SIZE = 10;
+constexpr int VECTOR_SIZE = 15;
 
-host_vector<int> get_random_host_vector(size_t size);
+thrust::host_vector<int> get_random_host_vector(size_t size);
 
 struct add_tuple_values {
     __device__ int operator ()(thrust::tuple<int, int> tuple) {
-        return tuple.get<0>() + tuple.get<1>();
+        return thrust::get<0>(tuple) + thrust::get<1>(tuple);
     }
 };
 
@@ -26,21 +25,21 @@ int main() {
     cout << "host vector v2 contains:" << endl;
     for_each(v2.begin(), v2.end(), [] (int item) { cout << item << " ";});
     cout << endl;
-    device_vector<int> dv1 = v1;
-    device_vector<int> dv2 = v2;
-    device_vector<int> dv_res(VECTOR_SIZE);
+    thrust::device_vector<int> dv1 = v1;
+    thrust::device_vector<int> dv2 = v2;
+    thrust::device_vector<int> dv_res(VECTOR_SIZE);
     auto begin = make_zip_iterator(thrust::make_tuple(dv1.begin(), dv2.begin()));
     auto end = make_zip_iterator(thrust::make_tuple(dv1.end(), dv2.end()));
     thrust::transform(begin, end, dv_res.begin(), add_tuple_values());
-    host_vector<int> res = dv_res;
+    thrust::host_vector<int> res = dv_res;
     cout << "host vector res contains:" << endl;
     for_each(res.begin(), res.end(), [] (int item) { cout << item << " ";});
     cout << endl;
     return 0;
 }
 
-host_vector<int> get_random_host_vector(size_t size) {
-    host_vector<int> random_vector(size);
+thrust::host_vector<int> get_random_host_vector(size_t size) {
+    thrust::host_vector<int> random_vector(size);
     random_device dev;
     default_random_engine engine(dev());
     uniform_int_distribution<int> uniform_dist(0, 100);

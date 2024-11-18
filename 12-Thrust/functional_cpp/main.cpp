@@ -18,8 +18,8 @@ int main() {
     transform(filtered_vector.begin(), filtered_vector.end(), squared_vector.begin(),
             [](auto item) { return item * item;});
     // reduce to sum
-    auto sum = accumulate(squared_vector.begin(), squared_vector.end(), 0,
-            [](int accumulator, int operand){ return accumulator + operand;});
+    const auto sum = accumulate(squared_vector.begin(), squared_vector.end(), 0,
+                                [](const auto accumulator, const auto operand){ return accumulator + operand;});
     cout << sum << endl;
 }
 
