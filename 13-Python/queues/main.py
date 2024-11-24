@@ -2,6 +2,7 @@ import hashlib
 import multiprocessing
 import random
 import string
+import time
 
 
 # the program will generate random string and their hashes will be computed in parallel
@@ -13,22 +14,23 @@ def process_elements(queue: multiprocessing.Queue, lock: multiprocessing.Lock):
     :param queue: a queue to receive items from
     :param lock: locks print statements to avoid messy output
     """
+    hashed_values = []
     while True:
-        item = queue.get()
-        if item is None:
+        items = queue.get()
+        if items is None:
             break
-        process_item(item, lock)
+        hashed_values += [(item, process_item(item)) for item in items]
+    output = '\n'.join(f'SHA 512 hash of {item} is {hashed_value}' for item, hashed_value in hashed_values)
+    with lock:
+        print(output)
 
 
-def process_item(item: str, lock: multiprocessing.Lock):
+def process_item(item: str):
     """
     Accepts an item, computes its SHA512 hash and prints it together with the value
     :param item: a string to process
-    :param lock: a lock for print statements
     """
-    hashed_value = hashlib.sha512(item.encode()).hexdigest()
-    with lock:
-        print(f'SHA 512 hash of {item} is {hashed_value}')
+    return hashlib.sha512(item.encode()).hexdigest()
 
 
 def get_random_string() -> str:
@@ -51,6 +53,7 @@ def generate_items_to_queue(queue: multiprocessing.Queue):
 
 
 def main():
+    t0 = time.time()
     queue = multiprocessing.Queue()
     cpu_count = multiprocessing.cpu_count()  # we will spawn as many processes as the core count
     lock = multiprocessing.Lock()
@@ -69,6 +72,8 @@ def main():
     # wait for the processes to finish
     for process in processing_processes:
         process.join()
+    t1 = time.time()
+    print(f"Elapsed {t1 - t0:.2f} seconds")
 
 
 if __name__ == '__main__':
