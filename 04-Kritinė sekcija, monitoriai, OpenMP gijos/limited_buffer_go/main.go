@@ -76,7 +76,7 @@ func (buffer *LimitedBuffer) Insert(item int) {
 	for buffer.currentSize == len(buffer.container) {
 		buffer.cond.Wait()
 	}
-	buffer.container[buffer.currentSize] = item
+	buffer.container[buffer.to] = item
 	buffer.to = (buffer.to + 1) % len(buffer.container)
 	buffer.currentSize++
 	buffer.cond.Broadcast()
